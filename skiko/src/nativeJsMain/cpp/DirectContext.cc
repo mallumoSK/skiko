@@ -3,6 +3,10 @@
 #include "common.h"
 #include "ganesh/gl/GrGLDirectContext.h" // TODO: skia update: check if it's correct
 
+#ifdef SK_EGL
+#include "include/gpu/gl/egl/GrGLMakeEGLInterface.h"
+#endif
+
 #ifdef SK_METAL
 #include "ganesh/mtl/GrMtlBackendContext.h"
 #include "ganesh/mtl/GrMtlDirectContext.h"
@@ -14,7 +18,11 @@
 
 SKIKO_EXPORT KNativePointer org_jetbrains_skia_DirectContext__1nMakeGL
   () {
+#ifdef SK_EGL
+    return reinterpret_cast<KNativePointer>(GrDirectContext::MakeGL(GrGLMakeEGLInterface()).release());
+#else
     return reinterpret_cast<KNativePointer>(GrDirectContexts::MakeGL().release());
+#endif //SK_EGL
 }
 
 SKIKO_EXPORT KNativePointer org_jetbrains_skia_DirectContext__1nMakeGLWithInterface

@@ -57,7 +57,7 @@ fun SkikoProjectContext.createWasmLinkTasks(): LinkWasmTasks = with(this.project
 
         flags.set(
             mutableListOf<String?>().apply {
-                addAll(skiaPreprocessorFlags(OS.Wasm, buildType))
+                addAll(skiaPreprocessorFlags(OS.Wasm, Arch.Wasm, buildType))
                 addAll(buildType.clangFlags)
                 add("-fno-rtti")
                 add("-fno-exceptions")

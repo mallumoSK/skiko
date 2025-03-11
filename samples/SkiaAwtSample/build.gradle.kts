@@ -85,3 +85,7 @@ tasks.register("runInterop") {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
 }
+
+kotlin {
+    jvmToolchain(17)
+}

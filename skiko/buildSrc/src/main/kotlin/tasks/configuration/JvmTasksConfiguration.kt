@@ -125,7 +125,7 @@ fun SkikoProjectContext.createCompileJvmBindingsTask(
 
     flags.set(
         listOf(
-            *skiaPreprocessorFlags(targetOs, buildType),
+            *skiaPreprocessorFlags(targetOs, targetArch, buildType),
             *osFlags
         )
     )
@@ -202,7 +202,7 @@ fun SkikoProjectContext.createObjcCompileTask(
             "-arch", if (arch == Arch.Arm64) "arm64" else "x86_64",
             *os.clangFlags,
             *buildType.clangFlags,
-            *skiaPreprocessorFlags(os, buildType),
+            *skiaPreprocessorFlags(os, arch, buildType),
             "-fPIC"
         )
     )
@@ -284,7 +284,10 @@ fun SkikoProjectContext.createLinkJvmBindings(
                 "$skiaBinDir/libskunicode_core.a",
                 "$skiaBinDir/libskunicode_icu.a",
                 "$skiaBinDir/libskshaper.a",
-            )
+            ).let {
+                if (targetArch == Arch.Arm64) it +  "-lEGL"
+                else it
+            }
         }
         OS.Windows -> {
             linker.set(windowsSdkPaths.linker.absolutePath)

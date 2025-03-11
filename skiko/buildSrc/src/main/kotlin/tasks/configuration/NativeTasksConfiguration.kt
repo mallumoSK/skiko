@@ -87,7 +87,7 @@ fun SkikoProjectContext.compileNativeBridgesTask(
                     *iosArchFlags,
                     *buildType.clangFlags,
                     "-stdlib=libc++",
-                    *skiaPreprocessorFlags(OS.IOS, buildType),
+                    *skiaPreprocessorFlags(OS.IOS, arch, buildType),
                 ))
             }
             OS.TVOS -> {
@@ -111,13 +111,13 @@ fun SkikoProjectContext.compileNativeBridgesTask(
                     *tvosArchFlags,
                     *buildType.clangFlags,
                     "-stdlib=libc++",
-                    *skiaPreprocessorFlags(OS.TVOS, buildType),
+                    *skiaPreprocessorFlags(OS.TVOS, arch, buildType),
                 ))
             }
             OS.MacOS -> {
                 flags.set(listOf(
                     *buildType.clangFlags,
-                    *skiaPreprocessorFlags(OS.MacOS, buildType)
+                    *skiaPreprocessorFlags(OS.MacOS, arch, buildType)
                 ))
             }
             OS.Linux -> {
@@ -128,7 +128,7 @@ fun SkikoProjectContext.compileNativeBridgesTask(
                     "-fvisibility=hidden",
                     "-fvisibility-inlines-hidden",
                     "-D_GLIBCXX_USE_CXX11_ABI=0",
-                    *skiaPreprocessorFlags(OS.Linux, buildType)
+                    *skiaPreprocessorFlags(OS.Linux, arch, buildType)
                 ))
             }
             else -> throw GradleException("$os not yet supported")
@@ -235,15 +235,20 @@ fun SkikoProjectContext.configureNativeTarget(os: OS, arch: Arch, target: Kotlin
             mutableListOfLinkerOptions(tvosFrameworks)
         }
         OS.Linux -> mutableListOfLinkerOptions(
-            "-L/usr/lib/x86_64-linux-gnu",
-            "-lfontconfig",
-            "-lGL",
-            // TODO: an ugly hack, Linux linker searches only unresolved symbols.
-            "$skiaBinDir/libsksg.a",
-            "$skiaBinDir/libskshaper.a",
-            "$skiaBinDir/libskunicode_core.a",
-            "$skiaBinDir/libskunicode_icu.a",
-            "$skiaBinDir/libskia.a"
+           listOf(
+               "-L/usr/lib/${if (arch == Arch.Arm64) "aarch64" else "x86_64"}-linux-gnu",
+               "-lfontconfig",
+               "-lGL",
+               // TODO: an ugly hack, Linux linker searches only unresolved symbols.
+               "$skiaBinDir/libsksg.a",
+               "$skiaBinDir/libskshaper.a",
+               "$skiaBinDir/libskunicode_core.a",
+               "$skiaBinDir/libskunicode_icu.a",
+               "$skiaBinDir/libskia.a"
+           ).let {
+               if (arch == Arch.Arm64) it + "-lEGL"
+               else it
+           }
         )
         else -> mutableListOf()
     }
