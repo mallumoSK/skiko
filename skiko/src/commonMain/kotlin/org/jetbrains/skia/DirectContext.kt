@@ -15,6 +15,13 @@ class DirectContext internal constructor(ptr: NativePointer) : RefCnt(ptr) {
             return DirectContext(ptr)
         }
 
+        fun makeEGL(): DirectContext {
+            Stats.onNativeCall()
+            val ptr = _nMakeEGL()
+            if (ptr == NullPointer) throw RenderException("Can't create OpenGL ES DirectContext")
+            return DirectContext(ptr)
+        }
+
         fun makeMetal(devicePtr: NativePointer, queuePtr: NativePointer): DirectContext {
             Stats.onNativeCall()
             return DirectContext(_nMakeMetal(devicePtr, queuePtr))
@@ -144,6 +151,10 @@ private external fun DirectContext_nFlushDefault(ptr: NativePointer)
 @ExternalSymbolName("org_jetbrains_skia_DirectContext__1nMakeGL")
 @ModuleImport("./skiko.mjs", "org_jetbrains_skia_DirectContext__1nMakeGL")
 private external fun _nMakeGL(): NativePointer
+
+@ExternalSymbolName("org_jetbrains_skia_DirectContext__1nMakeEGL")
+@ModuleImport("./skiko.mjs", "org_jetbrains_skia_DirectContext__1nMakeEGL")
+private external fun _nMakeEGL(): NativePointer
 
 @ExternalSymbolName("org_jetbrains_skia_DirectContext__1nMakeMetal")
 @ModuleImport("./skiko.mjs", "org_jetbrains_skia_DirectContext__1nMakeMetal")

@@ -2,10 +2,7 @@
 #include "include/gpu/gl/GrGLInterface.h"
 #include "common.h"
 #include "ganesh/gl/GrGLDirectContext.h" // TODO: skia update: check if it's correct
-
-#ifdef SK_EGL
 #include "include/gpu/gl/egl/GrGLMakeEGLInterface.h"
-#endif
 
 #ifdef SK_METAL
 #include "ganesh/mtl/GrMtlBackendContext.h"
@@ -16,13 +13,12 @@
 #include "d3d/GrD3DBackendContext.h"
 #endif
 
-SKIKO_EXPORT KNativePointer org_jetbrains_skia_DirectContext__1nMakeGL
-  () {
-#ifdef SK_EGL
-    return reinterpret_cast<KNativePointer>(GrDirectContext::MakeGL(GrGLMakeEGLInterface()).release());
-#else
+SKIKO_EXPORT KNativePointer org_jetbrains_skia_DirectContext__1nMakeGL() {
     return reinterpret_cast<KNativePointer>(GrDirectContexts::MakeGL().release());
-#endif //SK_EGL
+}
+
+SKIKO_EXPORT KNativePointer org_jetbrains_skia_DirectContext__1nMakeEGL() {
+    return reinterpret_cast<KNativePointer>(GrDirectContext::MakeGL(GrGLMakeEGLInterface()).release());
 }
 
 SKIKO_EXPORT KNativePointer org_jetbrains_skia_DirectContext__1nMakeGLWithInterface

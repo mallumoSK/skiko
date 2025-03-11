@@ -125,7 +125,7 @@ fun SkikoProjectContext.createCompileJvmBindingsTask(
 
     flags.set(
         listOf(
-            *skiaPreprocessorFlags(targetOs, targetArch, buildType),
+            *skiaPreprocessorFlags(targetOs, buildType),
             *osFlags
         )
     )
@@ -202,7 +202,7 @@ fun SkikoProjectContext.createObjcCompileTask(
             "-arch", if (arch == Arch.Arm64) "arm64" else "x86_64",
             *os.clangFlags,
             *buildType.clangFlags,
-            *skiaPreprocessorFlags(os, arch, buildType),
+            *skiaPreprocessorFlags(os, buildType),
             "-fPIC"
         )
     )

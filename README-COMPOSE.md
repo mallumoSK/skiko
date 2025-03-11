@@ -9,7 +9,7 @@ git clone --branch compose/1.7.3 https://github.com/mallumoSK/skiko.git && cd sk
 ```shell
 sudo sh ./docker/linux-arm64/setup-embeded.sh
 
-sed -i "s/.*deploy.version.*/deploy.version=0.8.18-compose-1.7.3/g" ./gradle.properties
+sed -i "s/.*deploy.version.*/deploy.version=0.8.18-compose-1.7.3-2/g" ./gradle.properties
 
 ./build-with-local-skia-runtime.sh \
   "m126-6bfb13368b" \

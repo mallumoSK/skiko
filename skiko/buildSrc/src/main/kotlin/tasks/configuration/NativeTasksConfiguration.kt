@@ -87,7 +87,7 @@ fun SkikoProjectContext.compileNativeBridgesTask(
                     *iosArchFlags,
                     *buildType.clangFlags,
                     "-stdlib=libc++",
-                    *skiaPreprocessorFlags(OS.IOS, arch, buildType),
+                    *skiaPreprocessorFlags(OS.IOS, buildType),
                 ))
             }
             OS.TVOS -> {
@@ -111,13 +111,13 @@ fun SkikoProjectContext.compileNativeBridgesTask(
                     *tvosArchFlags,
                     *buildType.clangFlags,
                     "-stdlib=libc++",
-                    *skiaPreprocessorFlags(OS.TVOS, arch, buildType),
+                    *skiaPreprocessorFlags(OS.TVOS, buildType),
                 ))
             }
             OS.MacOS -> {
                 flags.set(listOf(
                     *buildType.clangFlags,
-                    *skiaPreprocessorFlags(OS.MacOS, arch, buildType)
+                    *skiaPreprocessorFlags(OS.MacOS, buildType)
                 ))
             }
             OS.Linux -> {
@@ -128,7 +128,7 @@ fun SkikoProjectContext.compileNativeBridgesTask(
                     "-fvisibility=hidden",
                     "-fvisibility-inlines-hidden",
                     "-D_GLIBCXX_USE_CXX11_ABI=0",
-                    *skiaPreprocessorFlags(OS.Linux, arch, buildType)
+                    *skiaPreprocessorFlags(OS.Linux, buildType)
                 ))
             }
             else -> throw GradleException("$os not yet supported")
@@ -245,10 +245,7 @@ fun SkikoProjectContext.configureNativeTarget(os: OS, arch: Arch, target: Kotlin
                "$skiaBinDir/libskunicode_core.a",
                "$skiaBinDir/libskunicode_icu.a",
                "$skiaBinDir/libskia.a"
-           ).let {
-               if (arch == Arch.Arm64) it + "-lEGL"
-               else it
-           }
+           )
         )
         else -> mutableListOf()
     }
