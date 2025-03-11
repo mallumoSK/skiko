@@ -53,7 +53,7 @@ case $SKIA_TARGET in
     ;;
   "linux")
     SKIKO_TARGET_FLAGS="-Pskiko.awt.enabled=true"
-    if [[ $(uname -m) == 'arm64' ]]; then
+    if [[ $(uname -m) == 'arm64' || $(uname -m) == 'aarch64' ]]; then
       skikoMachines=("arm64")
     else
       skikoMachines=("x64")

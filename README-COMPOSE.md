@@ -7,7 +7,7 @@ git clone --branch compose/1.7.3 https://github.com/mallumoSK/skiko.git && cd sk
 ### LINUX
 #### OpenGL ES ARM64
 ```shell
-./docker/linux-arm64/setup-embeded.sh
+sudo sh ./docker/linux-arm64/setup-embeded.sh
 
 sed -i "s/.*deploy.version.*/deploy.version=0.8.18-compose-1.7.3/g" ./gradle.properties
 
